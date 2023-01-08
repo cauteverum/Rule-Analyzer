@@ -11,7 +11,7 @@ def management():
 
                                 HELP
 
-              ls        ------> list your firewall and their ip addresses. 
+              ls        ------> list your firewalls and their ip addresses. 
             --help      ------> Help Menu   
             --add       ------> Add a firewall for syslog server to listen.
         (format for --add ----> --add -f 'name of firewall' -i 'ip address of firewall')
