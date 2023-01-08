@@ -1,0 +1,6 @@
+Before begining, what you should do first is to run this command 
+"python manage.py --help" 
+After running this command, code let you know how to use it. 
+I definitely offer that you define 'exempt' in way shown at --help command. 
+If you don't define 'exempt', some rules create lots of log especially local to outside rules
+
