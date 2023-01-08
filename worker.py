@@ -45,7 +45,6 @@ class JOB:
                 connection.commit()
                 
             else: 
-                print("ELSE CONDITION WORKED")
                 cursor.execute(f"""
                     INSERT INTO {devname} (policyid, srcip, dstip, dstport, count) VALUES (?,?,?,?,?)
                 """, (policyid, srcip, dstip, dstport, 1))
