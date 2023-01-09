@@ -7,16 +7,15 @@ from time import sleep
 def reportFunction(): 
     while True:
         sleep(20)
-        print("Report Thread worked")
+        # print("Report Thread worked")
         firewalls = JOB.detectFirewalls()
         for firewall in firewalls: 
-            print(firewall)
+            # print(firewall)
             JOB.calculate(firewall)
     
 instance = SYSLOGSERVER()
 serverThread = threading.Thread(target=instance.start)
 reportThread = threading.Thread(target=reportFunction)
-
 
 
 if __name__ == '__main__': 
