@@ -64,7 +64,7 @@ class DB_MANAGEMENT:
         backToServer = []
         firewalls = cursor.fetchall()
         for f in firewalls: 
-            backToServer.append({"Firewall:":f[0], "IP":f[1]})
+            backToServer.append(f[1])
         return backToServer
 
 
@@ -72,15 +72,15 @@ class DB_MANAGEMENT:
     def checklistenFw(self,ip): 
         connection = sqlite3.connect("listenThis.db")
         cursor = connection.cursor()
-        print(ip)
+        # print(ip)
         cursor.execute("SELECT ip from firewalls WHERE ip = ?", (ip,))
         lenght = cursor.fetchall()
-        print(f"Lenght: {lenght}")
+        # print(f"Lenght: {lenght}")
         if len(lenght) > 0: 
-            print("Return True")
+            # print("Return True")
             return True
         else: 
-            print("Return False")
+            # print("Return False")
             return False
     
     def exempt(self,fname=str, exemptPolicies=str): 
@@ -92,11 +92,11 @@ class DB_MANAGEMENT:
         connection.commit()
 
 
-    def checkExempt(self): 
+    def checkExempt(self, fname=str): 
         connection = sqlite3.connect("listenThis.db")
         cursor = connection.cursor()
         cursor.execute("""
-            SELECT * FROM firewalls
-        """)
-        result = cursor.fetchall()
-        return result
+            SELECT exempt FROM firewalls where (name = ?)
+        """,(fname,))
+        result = cursor.fetchone()
+        return result[0].split(',')

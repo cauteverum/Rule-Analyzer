@@ -1,10 +1,58 @@
 import sqlite3
+from dbManagement import DB_MANAGEMENT
+
+import pandas as pd 
 class JOB: 
     def __init__(self): 
         pass
+    
+    @staticmethod
+    def detectFirewalls(): 
+        connection = sqlite3.connect("listenThis.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT name from firewalls")
+        result = cursor.fetchall()
+        firewalls = []
+        for res in result: 
+            firewalls.append(res[0])
+        return firewalls
 
     @staticmethod
-    def parser(text=str, exemptPolicy = []): 
+    def calculate(db):
+        dbname = db + '.db'
+        connection = sqlite3.connect(dbname)
+        df = pd.read_sql_query(f"SELECT * FROM {db}", connection)
+        policies = df["policyid"].unique()
+        fullText = ''
+        fileName = db + '.txt'
+        with open(file=fileName, mode='w',encoding='utf-8') as file: 
+            file.write('')
+        for pol in policies: 
+            totalUsage = df[df["policyid"] == pol]["count"].sum()
+            srcipUnique = df[(df["policyid"]==pol)]["srcip"].unique()
+            dstipUnique = df[(df["policyid"]==pol)]["dstip"].unique()
+            dstportUnique = df[(df["policyid"]==pol)]["dstport"].unique()
+
+            for src in srcipUnique: 
+                count = df[ (df["policyid"]==pol)  & (df["srcip"]== src)]["count"].sum()     
+                if count/totalUsage > 0.3: 
+                    fullText = fullText + f"policy:{pol} srcip:{src} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" + '\n'   
+            for dst in dstipUnique: 
+                count = df[ (df["policyid"]==pol)  & (df["dstip"]== dst)]["count"].sum()     
+                if count/totalUsage > 0.3: 
+                    fullText = fullText + f"policy:{pol} dstip:{dst} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" +'\n'         
+            for dstport in dstportUnique: 
+                count = df[ (df["policyid"]==pol)  & (df["dstport"]== dstport)]["count"].sum()     
+                if count/totalUsage > 0.3:
+                    fullText = fullText + f"policy:{pol} dstport:{dstport} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" +'\n'             
+            with open(file=fileName,mode='a',encoding='utf-8') as file: 
+                file.write(f"Policy:{pol} src unique:{len(srcipUnique)} destination unique:{len(dstipUnique)} dport unique:{len(dstportUnique)}\n" + fullText.strip() + '\n\n\n')
+            fullText = ''
+
+
+    @staticmethod
+    def parser(text=str): 
+        print("PARSER WORKED")
         text = text.split()
         policyid, srcip, dstip, dstport = '', '', '', ''
         for t in text: 
@@ -16,15 +64,10 @@ class JOB:
             elif 'dstport=' in t: dstport = t.split('=')[1]
                 
         
-        connection = sqlite3.connect("listenThis.db")
-        cursor = connection.cursor()
-        cursor.execute("""
-            SELECT exempt from firewalls where (name = ?)
-        """, (devname,))
-        exemptPolicy = cursor.fetchone()[0].split(',')
-        connection.close()
+        exemptPolicy = DB_MANAGEMENT().checkExempt(devname)
 
         if (dstport != '') and (policyid != '0') and (subtype == '"forward"') and (not policyid in exemptPolicy): 
+            print("CONDITIONS WORKED")
             dbname = str(devname).strip('""') + '.db'
             connection = sqlite3.connect(dbname)
             cursor = connection.cursor()
@@ -32,6 +75,7 @@ class JOB:
                 SELECT * FROM {devname} where (policyid = ? and srcip = ? and dstip = ? and dstport = ?)
             """, (policyid, srcip, dstip, dstport))
             duplicate = cursor.fetchall()
+            
 
             if len(duplicate) > 0: 
                 cursor.execute(f"""
@@ -45,6 +89,7 @@ class JOB:
                 connection.commit()
                 
             else: 
+                print("ELSE CONDITION WORKED")
                 cursor.execute(f"""
                     INSERT INTO {devname} (policyid, srcip, dstip, dstport, count) VALUES (?,?,?,?,?)
                 """, (policyid, srcip, dstip, dstport, 1))
@@ -52,3 +97,7 @@ class JOB:
             connection.close()
 
 
+
+
+testText = 'devname=Fortigate srcip=1.1.1.1 dstip=3.3.3.3 dstport=33 policyid=13 subtype="forward"'
+JOB.parser(testText)

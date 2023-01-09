@@ -2,8 +2,6 @@ import socket
 from dbManagement import DB_MANAGEMENT
 from worker import JOB
 
-
-
 class SYSLOGSERVER: 
     def __init__(self): 
         self.PORT = 514
@@ -15,14 +13,18 @@ class SYSLOGSERVER:
         self.server.bind(self.ADDR)
         self.instance_DBM = DB_MANAGEMENT()
 
+
+
     def start(self): 
         listen = self.instance_DBM.showListendb()
-        print(listen)
+        # print(listen)
         print(f"[LISTENING] server is listening on {self.SERVER}:{self.PORT}")
         while not self.BREAK: 
             message , addr = self.server.recvfrom(1024)
             message = str(message.decode(self.FORMAT))
+            print(message)
             if addr[0] in listen: 
+                print('IM HERE')
                 print(addr, message)
                 JOB.parser(message)
 
