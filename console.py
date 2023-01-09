@@ -16,8 +16,7 @@ def reportFunction():
 instance = SYSLOGSERVER()
 serverThread = threading.Thread(target=instance.start)
 reportThread = threading.Thread(target=reportFunction)
-reportThread.start()
-serverThread.start()
+
 
 
 if __name__ == '__main__': 
