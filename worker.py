@@ -52,7 +52,7 @@ class JOB:
 
     @staticmethod
     def parser(text=str): 
-        print("PARSER WORKED")
+        # print("PARSER WORKED")
         text = text.split()
         policyid, srcip, dstip, dstport = '', '', '', ''
         for t in text: 
@@ -62,12 +62,12 @@ class JOB:
             elif 'srcip=' in t: srcip = t.split('=')[1]               
             elif 'dstip=' in t: dstip = t.split('=')[1]                
             elif 'dstport=' in t: dstport = t.split('=')[1]
-                
-        
+   
+
         exemptPolicy = DB_MANAGEMENT().checkExempt(devname)
 
         if (dstport != '') and (policyid != '0') and (subtype == '"forward"') and (not policyid in exemptPolicy): 
-            print("CONDITIONS WORKED")
+            # print("CONDITIONS WORKED")
             dbname = str(devname).strip('""') + '.db'
             connection = sqlite3.connect(dbname)
             cursor = connection.cursor()
@@ -89,15 +89,9 @@ class JOB:
                 connection.commit()
                 
             else: 
-                print("ELSE CONDITION WORKED")
+                # print("ELSE CONDITION WORKED")
                 cursor.execute(f"""
                     INSERT INTO {devname} (policyid, srcip, dstip, dstport, count) VALUES (?,?,?,?,?)
                 """, (policyid, srcip, dstip, dstport, 1))
                 connection.commit()
             connection.close()
-
-
-
-
-testText = 'devname=Fortigate srcip=1.1.1.1 dstip=3.3.3.3 dstport=33 policyid=13 subtype="forward"'
-JOB.parser(testText)

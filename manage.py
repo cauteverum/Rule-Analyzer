@@ -29,6 +29,7 @@ def management():
         if ch.lower() == 'y': 
             instance_DBM.listen(name=name, ip=ip)
             instance_DBM.createDbForFw()
+            print("[DONE]")
 
     elif ("ls" in argument): 
         result = instance_DBM.showListendb()
@@ -41,6 +42,7 @@ def management():
             fname = argument[idx+2]
             exemptPolicies = argument[idx+4]
             instance_DBM.exempt(fname=fname, exemptPolicies=exemptPolicies)
+            print("[DONE]")
         except: 
             pass
 
