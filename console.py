@@ -6,7 +6,7 @@ from time import sleep
 
 def reportFunction(): 
     while True:
-        sleep(20)
+        sleep(60)
         # print("Report Thread worked")
         firewalls = JOB.detectFirewalls()
         for firewall in firewalls: 

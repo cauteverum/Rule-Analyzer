@@ -15,7 +15,7 @@ class DB_MANAGEMENT:
                 dbname = d[0] + '.db'
                 if not os.path.exists(f"{dbname}"): 
                     table = f"""
-                    CREATE TABLE IF NOT EXISTS "{d[0]}" (
+                    CREATE TABLE "{d[0]}" (
                     "policyid" TEXT,
                     "srcip"	TEXT,
                     "dstip"	TEXT,
@@ -56,7 +56,7 @@ class DB_MANAGEMENT:
                 connection.close()
         except: 
             print("This firewall is already in database")
-
+    
     def showListendb(self): 
         connection = sqlite3.connect("listenThis.db")
         cursor = connection.cursor()
@@ -100,3 +100,4 @@ class DB_MANAGEMENT:
         """,(fname,))
         result = cursor.fetchone()
         return result[0].split(',')
+

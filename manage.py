@@ -1,7 +1,7 @@
 from sys import argv
 from dbManagement import DB_MANAGEMENT
 from os import system
-system("color 0C")
+system("color 0A")
 instance_DBM = DB_MANAGEMENT()
 def management(): 
     argument = argv

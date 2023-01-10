@@ -22,9 +22,7 @@ class SYSLOGSERVER:
         while not self.BREAK: 
             message , addr = self.server.recvfrom(1024)
             message = str(message.decode(self.FORMAT))
-            print(message)
             if addr[0] in listen: 
-                print('IM HERE')
                 print(addr, message)
                 JOB.parser(message)
 

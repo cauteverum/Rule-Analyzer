@@ -52,23 +52,20 @@ class JOB:
 
     @staticmethod
     def parser(text=str): 
-        # print("PARSER WORKED")
         text = text.split()
         policyid, srcip, dstip, dstport = '', '', '', ''
         for t in text: 
-            if 'subtype=' in t: subtype = t.split('=')[1]                
-            elif 'devname=' in t: devname = t.split('=')[1]               
+            if 'subtype=' in t: subtype = t.split('=')[1].strip('""')             
+            elif 'devname=' in t: devname = t.split('=')[1].strip('""')           
             elif 'policyid=' in t: policyid = t.split('=')[1]              
             elif 'srcip=' in t: srcip = t.split('=')[1]               
             elif 'dstip=' in t: dstip = t.split('=')[1]                
             elif 'dstport=' in t: dstport = t.split('=')[1]
-   
 
         exemptPolicy = DB_MANAGEMENT().checkExempt(devname)
 
-        if (dstport != '') and (policyid != '0') and (subtype == '"forward"') and (not policyid in exemptPolicy): 
-            # print("CONDITIONS WORKED")
-            dbname = str(devname).strip('""') + '.db'
+        if (dstport != '') and (policyid != '0') and (subtype == 'forward') and (not policyid in exemptPolicy): 
+            dbname = str(devname) + '.db'
             connection = sqlite3.connect(dbname)
             cursor = connection.cursor()
             cursor.execute(f"""
@@ -89,9 +86,9 @@ class JOB:
                 connection.commit()
                 
             else: 
-                # print("ELSE CONDITION WORKED")
                 cursor.execute(f"""
                     INSERT INTO {devname} (policyid, srcip, dstip, dstport, count) VALUES (?,?,?,?,?)
                 """, (policyid, srcip, dstip, dstport, 1))
                 connection.commit()
             connection.close()
+
