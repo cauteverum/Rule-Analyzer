@@ -22,15 +22,18 @@ def management():
         """
         print(info)
     elif ("--add" in argument) and ('-f' in argument) and ('-i' in argument): 
-        idx = argument.index("--add")
-        name = argument[idx+2]
-        ip = argument[idx+4]
-        ch = input(f"Name: {name} ip address: {ip}\nDo you want to continue?(y/n): ")
-        if ch.lower() == 'y': 
-            instance_DBM.listen(name=name, ip=ip)
-            instance_DBM.createDbForFw()
-            print("[DONE]")
-
+        try:
+            idx = argument.index("--add")
+            name = argument[idx+2]
+            ip = argument[idx+4]
+            ch = input(f"Name: {name} ip address: {ip}\nDo you want to continue?(y/n): ")
+            if ch.lower() == 'y': 
+                instance_DBM.listen(name=name, ip=ip)
+                instance_DBM.createDbForFw()
+                print("[DONE]")
+        except:
+            print("[Syntax Error]")
+            
     elif ("ls" in argument): 
         result = instance_DBM.showListendb()
         for i in result: 
@@ -44,7 +47,7 @@ def management():
             instance_DBM.exempt(fname=fname, exemptPolicies=exemptPolicies)
             print("[DONE]")
         except: 
-            pass
+            print("[Syntax Error]")
 
 if __name__ == '__main__': 
     management()
