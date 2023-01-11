@@ -62,8 +62,9 @@ class JOB:
             elif 'dstip=' in t: dstip = t.split('=')[1]                
             elif 'dstport=' in t: dstport = t.split('=')[1]
 
-        exemptPolicy = DB_MANAGEMENT().checkExempt(devname)
 
+    
+        exemptPolicy = DB_MANAGEMENT().checkExempt(devname)
         if (dstport != '') and (policyid != '0') and (subtype == 'forward') and (not policyid in exemptPolicy): 
             dbname = str(devname) + '.db'
             connection = sqlite3.connect(dbname)

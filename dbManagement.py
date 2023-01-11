@@ -41,8 +41,9 @@ class DB_MANAGEMENT:
                 connection = sqlite3.connect('listenThis.db')
                 cursor = connection.cursor()
                 cursor.execute(table)
-                insertQuery = "insert into firewalls (name,ip) VALUES (?,?)"
-                values = (name,ip)
+                exempt = '0'
+                insertQuery = "insert into firewalls (name,ip,exempt) VALUES (?,?,?)"
+                values = (name,ip,exempt)
                 cursor.execute(insertQuery, values)
                 connection.commit()
                 connection.close()
