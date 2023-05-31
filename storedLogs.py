@@ -46,6 +46,7 @@ def get_content_convert_list():
 
 def create_json_convert_pandasDF(logs:list): 
     try: 
+        logs = logs[0:5000]
         policyids, srcips, dstips, dstports = [],[],[],[]
         jsonFormat = {
             "policyid":policyids,
@@ -113,7 +114,7 @@ def operation(df):
                     if count/totalUsage > weight/100: 
                         fullText = fullText + f"policy:{pol} dstip:{dst} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" +'\n' 
                 for dstport in dstportUnique: 
-                    count = df[ (df["policyid"]==pol)  & (df["dstip"]== dst)]["count"].sum()    
+                    count = df[ (df["policyid"]==pol)  & (df["dstport"]== dstport)]["count"].sum()    
                     if count/totalUsage > weight/100: 
                         fullText = fullText + f"policy:{pol} dstport:{dstport} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" +'\n'  
 
