@@ -50,7 +50,7 @@ def management():
             if ch.lower() == 'y': 
                 instance_DBM.listen(name=name, ip=ip)
                 instance_DBM.createDbForFw()
-                print("[DONE]")
+                print(f"listenThis.db and {name}.db was created...\n[DONE]")
         except:
             print("[Syntax Error]")
             

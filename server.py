@@ -17,7 +17,6 @@ class SYSLOGSERVER:
 
     def start(self): 
         listen = self.instance_DBM.showListendb()
-        # print(listen)
         print(f"[LISTENING] server is listening on {self.SERVER}:{self.PORT}")
         while not self.BREAK: 
             message , addr = self.server.recvfrom(1024)

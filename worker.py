@@ -35,15 +35,15 @@ class JOB:
 
             for src in srcipUnique: 
                 count = df[ (df["policyid"]==pol)  & (df["srcip"]== src)]["count"].sum()     
-                if count/totalUsage > 0.1: 
+                if count/totalUsage > 0.01: 
                     fullText = fullText + f"policy:{pol} srcip:{src} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" + '\n'   
             for dst in dstipUnique: 
                 count = df[ (df["policyid"]==pol)  & (df["dstip"]== dst)]["count"].sum()     
-                if count/totalUsage > 0.1: 
+                if count/totalUsage > 0.01: 
                     fullText = fullText + f"policy:{pol} dstip:{dst} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" +'\n'         
             for dstport in dstportUnique: 
                 count = df[ (df["policyid"]==pol)  & (df["dstport"]== dstport)]["count"].sum()     
-                if count/totalUsage > 0.1:
+                if count/totalUsage > 0.01:
                     fullText = fullText + f"policy:{pol} dstport:{dstport} used {count} times proportionally: % {round((count/totalUsage)*100, 3)}" +'\n'             
             with open(file=fileName,mode='a',encoding='utf-8') as file: 
                 file.write(f"Policy:{pol} src unique:{len(srcipUnique)} destination unique:{len(dstipUnique)} dport unique:{len(dstportUnique)}\n" + fullText.strip() + '\n\n\n')
