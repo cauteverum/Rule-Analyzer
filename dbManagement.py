@@ -75,9 +75,9 @@ class DB_MANAGEMENT:
         cursor = connection.cursor()
         # print(ip)
         cursor.execute("SELECT ip from firewalls WHERE ip = ?", (ip,))
-        lenght = cursor.fetchall()
-        # print(f"Lenght: {lenght}")
-        if len(lenght) > 0: 
+        length = cursor.fetchall()
+        # print(f"length: {length}")
+        if len(length) > 0: 
             # print("Return True")
             return True
         else: 
